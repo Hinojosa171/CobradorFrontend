@@ -2,38 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Users, FileText, DollarSign } from 'lucide-react';
 import api from '../../api';
 
-function AdminCobradorDetail({ cobradorId, onBack }) {
+function AdminCobradorDetail({ cobradorId }) {
   const [cobrador, setCobrador] = useState(null);
-  const [clientes, setClientes] = useState([]);
   const [creditos, setCreditos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     cargarDatos();
-  }, [cobradorId]);
+  }, [cobradorId, cargarDatos]); // ← Agregar cargarDatos aquí
 
   const cargarDatos = async () => {
     try {
       setLoading(true);
+      const resCobrador = await api.get(`/cobradores/${cobradorId}`);
+      setCobrador(resCobrador.data);
       
-      const cobradorRes = await api.get(`/cobradores?id=${cobradorId}`);
-      const cobradorData = cobradorRes.data.find(c => c._id === cobradorId);
-      if (cobradorData) {
-        setCobrador(cobradorData);
-      }
-      
-      const clientesRes = await api.get('/clientes');
-      const clientesFiltrados = clientesRes.data.filter(c => c.cobradorID === cobradorId);
-      setClientes(clientesFiltrados);
-      
-      const creditosRes = await api.get('/creditos');
-      const creditosFiltrados = creditosRes.data.filter(c => c.cobradorID === cobradorId);
-      setCreditos(creditosFiltrados);
-      
-    } catch (error) {
-      console.error('Error cargando datos:', error);
-      setError('Error al cargar los datos del cobrador');
+      const resCreditos = await api.get(`/creditos/cobrador/${cobradorId}`);
+      setCreditos(resCreditos.data);
+    } catch (err) {
+      setError('Error al cargar datos');
+      console.error(err);
     } finally {
       setLoading(false);
     }

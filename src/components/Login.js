@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login({ onLoginSuccess, onIrARegistro, rol = 'cobrador' }) {
   const [user, setUser] = useState('');
@@ -8,6 +9,7 @@ export default function Login({ onLoginSuccess, onIrARegistro, rol = 'cobrador' 
   const [cargando, setCargando] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
   const [mostrarListado, setMostrarListado] = useState(false);
+  const navigate = useNavigate();
 
   const esOficina = rol === 'oficina';
   const colorPrimario = esOficina ? 'purple' : 'blue';
