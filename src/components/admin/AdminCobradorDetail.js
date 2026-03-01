@@ -2,31 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Users, FileText, DollarSign } from 'lucide-react';
 import api from '../../api';
 
-function AdminCobradorDetail({ cobradorId }) {
+function AdminCobradorDetail({ cobradorId, onBack }) {
   const [cobrador, setCobrador] = useState(null);
   const [creditos, setCreditos] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    cargarDatos();
-  }, [cobradorId, cargarDatos]); // ← Agregar cargarDatos aquí
+    const cargarDatos = async () => {
+      try {
+        setLoading(true);
+        const resCobrador = await api.get(`/cobradores`);
+        const datos = resCobrador.data.find(c => c._id === cobradorId);
+        setCobrador(datos);
+        
+        const resCreditos = await api.get(`/creditos`);
+        const creditosDeCobrador = resCreditos.data.filter(c => c.cobradorID === cobradorId);
+        setCreditos(creditosDeCobrador);
 
-  const cargarDatos = async () => {
-    try {
-      setLoading(true);
-      const resCobrador = await api.get(`/cobradores/${cobradorId}`);
-      setCobrador(resCobrador.data);
-      
-      const resCreditos = await api.get(`/creditos/cobrador/${cobradorId}`);
-      setCreditos(resCreditos.data);
-    } catch (err) {
-      setError('Error al cargar datos');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const resClientes = await api.get(`/clientes`);
+        const clientesDeCobrador = resClientes.data.filter(c => c.cobradorID === cobradorId);
+        setClientes(clientesDeCobrador);
+      } catch (err) {
+        setError('Error al cargar datos');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    cargarDatos();
+  }, [cobradorId]);
 
   if (loading) {
     return <div className="text-center py-12">Cargando detalles del cobrador...</div>;
