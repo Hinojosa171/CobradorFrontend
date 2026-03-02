@@ -54,7 +54,6 @@ function AdminCobradorDetail({ cobradorId, onBack }) {
   }
 
   const creditosPendientes = creditos.filter(c => c.estado === 'Pendiente');
-  const creditosRealizados = creditos.filter(c => c.estado === 'Realizado');
   const totalPrestado = creditos.reduce((sum, c) => sum + (c.monto_prestado || 0), 0);
   const totalPorPagar = creditos.reduce((sum, c) => sum + (c.monto_por_pagar || 0), 0);
 
