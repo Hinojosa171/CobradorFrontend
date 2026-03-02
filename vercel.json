@@ -1,15 +1,12 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-builds",
-      "config": { "distDir": "build" }
-    }
-  ],
   "routes": [
     {
-      "src": "^/(?!api).*",
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
       "dest": "/index.html"
     }
   ]
