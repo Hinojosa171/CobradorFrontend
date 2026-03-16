@@ -10,8 +10,17 @@ function RoleSelector({ onSelectRole }) {
 
       <div className="w-full max-w-md space-y-4">
         <button
+          onClick={() => onSelectRole('gerente')}
+          className="w-full p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center hover:shadow-xl transition transform hover:scale-105 active:scale-95 border-b-4 border-green-500"
+        >
+          <span className="text-6xl mb-4">👑</span>
+          <span className="font-black text-gray-800 text-2xl">GERENTE</span>
+          <span className="text-gray-500 text-sm mt-2 font-semibold">Administrador Superior</span>
+        </button>
+
+        <button
           onClick={() => onSelectRole('oficina')}
-          className="w-full p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center hover:shadow-xl transition transform hover:scale-105 active:scale-95"
+          className="w-full p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center hover:shadow-xl transition transform hover:scale-105 active:scale-95 border-b-4 border-orange-500"
         >
           <span className="text-6xl mb-4">🏢</span>
           <span className="font-black text-gray-800 text-2xl">OFICINA</span>
@@ -20,7 +29,7 @@ function RoleSelector({ onSelectRole }) {
 
         <button
           onClick={() => onSelectRole('cobrador')}
-          className="w-full p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center hover:shadow-xl transition transform hover:scale-105 active:scale-95"
+          className="w-full p-8 bg-white rounded-2xl shadow-2xl flex flex-col items-center hover:shadow-xl transition transform hover:scale-105 active:scale-95 border-b-4 border-blue-500"
         >
           <span className="text-6xl mb-4">👤</span>
           <span className="font-black text-gray-800 text-2xl">COBRADOR</span>

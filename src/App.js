@@ -10,17 +10,72 @@ import AdminCobradorList from './components/admin/AdminCobradorList';
 import AdminCobradorDetail from './components/admin/AdminCobradorDetail';
 import AdminClienteList from './components/admin/AdminClienteList';
 import AdminCreditoList from './components/admin/AdminCreditoList';
+import LoginGerente from './components/LoginGerente';
+import GerenteNavbar from './components/GerenteNavbar';
+import GerenteDashboard from './components/GerenteDashboard';
+import CrearBarrio from './components/CrearBarrio';
+import CrearOficina from './components/CrearOficina';
+import CrearCobrador from './components/CrearCobrador';
 
 function App() {
-  const [rol, setRol] = useState(null); // 'oficina' o 'cobrador'
+  const [rol, setRol] = useState(null); // 'gerente', 'oficina' o 'cobrador'
   const [sesion, setSesion] = useState(null); // Aquí guardamos al usuario que entró
-  const [vista, setVista] = useState('login'); // 'login', 'register', 'menu', 'clientes', 'creditos', etc.
+  const [vista, setVista] = useState('login'); // 'login', 'register', 'menu', 'clientes', etc.
   const [adminCurrentPage, setAdminCurrentPage] = useState('dashboard'); // Para el rol oficina
   const [selectedCobradorId, setSelectedCobradorId] = useState(null); // Para ver detalle de cobrador
+  const [gerenteCurrentPage, setGerenteCurrentPage] = useState('dashboard'); // Para el rol gerente
 
   // SELECTOR DE ROL
   if (!rol) {
     return <RoleSelector onSelectRole={setRol} />;
+  }
+
+  // ==================== ROL GERENTE (NIVEL SUPERIOR) ====================
+  if (rol === 'gerente') {
+    // Si no hay sesión, mostramos la pantalla de Login del Gerente
+    if (!sesion) {
+      return (
+        <LoginGerente 
+          onLoginSuccess={(datos) => {
+            setSesion(datos);
+            setVista('menu');
+          }}
+          onVolver={() => setRol(null)}
+        />
+      );
+    }
+
+    // Si hay sesión, mostramos el panel del gerente
+    return (
+      <div className="min-h-screen bg-gray-100">
+        <GerenteNavbar 
+          currentPage={gerenteCurrentPage} 
+          onNavigate={setGerenteCurrentPage}
+          onLogout={() => { setSesion(null); setRol(null); }}
+          userName={sesion.nombre}
+        />
+        
+        {gerenteCurrentPage === 'dashboard' && (
+          <GerenteDashboard gerenteId={sesion._id} />
+        )}
+        
+        {gerenteCurrentPage === 'barrios' && (
+          <CrearBarrio />
+        )}
+        
+        {gerenteCurrentPage === 'oficinas' && (
+          <CrearOficina gerenteId={sesion._id} />
+        )}
+        
+        {gerenteCurrentPage === 'cobradores' && (
+          <CrearCobrador gerenteId={sesion._id} />
+        )}
+        
+        {gerenteCurrentPage === 'estadisticas' && (
+          <GerenteDashboard gerenteId={sesion._id} />
+        )}
+      </div>
+    );
   }
 
   // ==================== ROL COBRADOR (VERSIÓN MÓVIL) ====================
@@ -129,7 +184,7 @@ function App() {
           userName={sesion.nombre}
         />
         
-        {adminCurrentPage === 'dashboard' && <AdminDashboard />}
+        {adminCurrentPage === 'dashboard' && <AdminDashboard onicinaId={sesion._id} />}
         
         {adminCurrentPage === 'cobradores' && !selectedCobradorId && (
           <AdminCobradorList onSelectCobrador={setSelectedCobradorId} />
