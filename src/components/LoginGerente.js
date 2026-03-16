@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import api from '../api';
 
 export default function LoginGerente({ onLoginSuccess, onVolver }) {
@@ -6,20 +6,6 @@ export default function LoginGerente({ onLoginSuccess, onVolver }) {
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
-  const [gerentes, setGerentes] = useState([]);
-
-  // Cargar gerentes al renderizar (nota: no existe endpoint de listar, lo creamos)
-  useEffect(() => {
-    const cargarGerentes = async () => {
-      try {
-        // Por ahora usamos hardcode, el backend debería tener GET /api/gerentes
-        console.log('📋 Sistema de login de gerentes funcionando');
-      } catch (err) {
-        console.error('Error al cargar gerentes:', err);
-      }
-    };
-    cargarGerentes();
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
