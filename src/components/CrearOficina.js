@@ -196,21 +196,33 @@ export default function CrearOficina({ gerenteId }) {
 
               {/* Barrios */}
               <div className="mb-8">
-                <label className="block text-gray-700 font-bold mb-3">Asignar Barrios *</label>
-                <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 rounded-lg border-2 border-gray-300 max-h-40 overflow-y-auto">
+                <label className="block text-gray-700 font-bold mb-3">Asignar Barrios</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-lg border-2 border-gray-300 max-h-56 overflow-y-auto">
                   {barrios && barrios.length > 0 ? (
-                    barrios.map(barrio => (
-                      <label key={barrio._id} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={barriosSeleccionados.includes(barrio._id)}
-                          onChange={() => toggleBarrio(barrio._id)}
-                          className="w-5 h-5"
-                          disabled={cargando}
-                        />
-                        <span className="text-sm text-gray-700">{barrio.nombre}</span>
-                      </label>
-                    ))
+                    barrios.map(barrio => {
+                      const asignadoA = oficinas.filter(o => o.barrios?.includes(barrio._id));
+                      return (
+                        <div key={barrio._id} className="p-3 bg-white border rounded-lg">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={barriosSeleccionados.includes(barrio._id)}
+                              onChange={() => toggleBarrio(barrio._id)}
+                              className="w-5 h-5"
+                              disabled={cargando}
+                            />
+                            <div className="flex-1">
+                              <span className="text-sm font-medium text-gray-800">{barrio.nombre}</span>
+                              {asignadoA.length > 0 && (
+                                <p className="text-xs text-gray-500 mt-1">
+                                  ✓ Asignado a: {asignadoA.map(o => o.nombre).join(', ')}
+                                </p>
+                              )}
+                            </div>
+                          </label>
+                        </div>
+                      );
+                    })
                   ) : (
                     <p className="text-gray-500 text-sm">No hay barrios disponibles</p>
                   )}

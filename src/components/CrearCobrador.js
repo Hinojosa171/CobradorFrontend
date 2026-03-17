@@ -225,13 +225,29 @@ export default function CrearCobrador({ gerenteId }) {
             <h2 className="font-bold text-lg mb-4 text-gray-800">👥 Cobradores ({cobradores?.length || 0})</h2>
             <div className="space-y-2 max-h-96 overflow-y-auto text-sm">
               {cobradores && cobradores.length > 0 ? (
-                cobradores.map(cobrador => (
-                  <div key={cobrador._id} className="p-2 bg-purple-50 border-l-2 border-purple-500 rounded">
-                    <p className="font-bold text-purple-800 text-xs">{cobrador.nombre}</p>
-                    <p className="text-gray-600 text-xs">@{cobrador.usuario}</p>
-                    <p className="text-gray-500 text-xs">{cobrador.cedula}</p>
-                  </div>
-                ))
+                cobradores.map(cobrador => {
+                  const oficina = oficinas.find(o => o._id === cobrador.officinaID);
+                  return (
+                    <div key={cobrador._id} className="p-4 bg-purple-50 border-l-4 border-purple-500 rounded">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-bold text-purple-800">{cobrador.nombre}</p>
+                          <p className="text-gray-600 text-xs">@{cobrador.usuario}</p>
+                          <p className="text-gray-500 text-xs">🆔 {cobrador.cedula}</p>
+                        </div>
+                      </div>
+                      {oficina ? (
+                        <div className="mt-2 pt-2 border-t border-purple-200">
+                          <p className="text-sm font-semibold text-purple-700">
+                            🏢 Oficina: <span className="text-purple-900">{oficina.nombre}</span>
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-500 mt-2">⚠️ Oficina no asignada</p>
+                      )}
+                    </div>
+                  );
+                })
               ) : (
                 <p className="text-gray-500 text-xs">No hay cobradores</p>
               )}

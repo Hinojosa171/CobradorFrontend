@@ -181,7 +181,10 @@ function AdminClienteList({ onicinaId }) {
                 
                 <div className="pt-2 border-t">
                   <p className="text-xs text-gray-500">
-                    Cobrador: <span className="font-semibold text-gray-700">{getNombreCobrador(cliente.cobradorID)}</span>
+                    👤 Cobrador: <span className="font-semibold text-gray-700">{getNombreCobrador(cliente.cobradorID)}</span>
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    🏢 Oficina: <span className="font-semibold text-gray-700">{cliente.oficinaID ? '(De tu oficina actual)' : 'No asignada'}</span>
                   </p>
                 </div>
               </div>
