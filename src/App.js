@@ -138,7 +138,7 @@ function App() {
         )}
 
         {/* CLIENTES Y CRÉDITOS */}
-        {vista === 'clientes' && <ClienteList cobradorId={sesion._id} onVolver={() => setVista('menu')} />}
+        {vista === 'clientes' && <ClienteList cobrador={sesion} onVolver={() => setVista('menu')} />}
         {vista === 'creditos' && <CreditosList onVolver={() => setVista('menu')} />}
       </div>
     );
@@ -187,7 +187,7 @@ function App() {
         {adminCurrentPage === 'dashboard' && <AdminDashboard onicinaId={sesion._id} />}
         
         {adminCurrentPage === 'cobradores' && !selectedCobradorId && (
-          <AdminCobradorList onSelectCobrador={setSelectedCobradorId} />
+          <AdminCobradorList onicinaId={sesion._id} onSelectCobrador={setSelectedCobradorId} />
         )}
         
         {selectedCobradorId && (
@@ -197,9 +197,9 @@ function App() {
           />
         )}
         
-        {adminCurrentPage === 'clientes' && <AdminClienteList />}
+        {adminCurrentPage === 'clientes' && <AdminClienteList onicinaId={sesion._id} />}
         
-        {adminCurrentPage === 'creditos' && <AdminCreditoList />}
+        {adminCurrentPage === 'creditos' && <AdminCreditoList onicinaId={sesion._id} />}
       </div>
     );
   }

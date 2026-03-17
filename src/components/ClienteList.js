@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 
-export default function ClienteList({ cobradorId, onVolver }) {
+export default function ClienteList({ cobrador, onVolver }) {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState('');
   const [showModalCliente, setShowModalCliente] = useState(false);
@@ -55,7 +55,8 @@ export default function ClienteList({ cobradorId, onVolver }) {
 
       const res = await api.post('/clientes', {
         ...formCliente,
-        cobradorID: cobradorId
+        cobradorID: cobrador._id,
+        oficinaID: cobrador.officinaID
       });
 
       setClientes([...clientes, res.data]);
@@ -93,7 +94,8 @@ export default function ClienteList({ cobradorId, onVolver }) {
         monto_prestado: Number.parseFloat(formCredito.monto_prestado),
         fecha_vencimiento: formCredito.fecha_vencimiento,
         clienteID: clienteSel._id,
-        cobradorID: cobradorId
+        cobradorID: cobrador._id,
+        oficinaID: cobrador.officinaID
       });
 
       console.log("✅ Crédito creado:", res.data);

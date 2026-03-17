@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, DollarSign } from 'lucide-react';
 import api from '../../api';
 
-function AdminCreditoList() {
+function AdminCreditoList({ onicinaId }) {
   const [creditos, setCreditos] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [cobradores, setCobradores] = useState([]);
@@ -15,15 +15,15 @@ function AdminCreditoList() {
 
   useEffect(() => {
     cargarDatos();
-  }, []);
+  }, [onicinaId]);
 
   const cargarDatos = async () => {
     try {
       setLoading(true);
       const [creditosRes, clientesRes, cobradoresRes] = await Promise.all([
-        api.get('/creditos'),
-        api.get('/clientes'),
-        api.get('/cobradores'),
+        api.get(`/oficinas/${onicinaId}/creditos`),
+        api.get(`/oficinas/${onicinaId}/clientes`),
+        api.get(`/oficinas/${onicinaId}/cobradores`),
       ]);
       setCreditos(creditosRes.data);
       setClientes(clientesRes.data);

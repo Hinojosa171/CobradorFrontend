@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Mail, Phone, MapPin } from 'lucide-react';
 import api from '../../api';
 
-function AdminClienteList() {
+function AdminClienteList({ onicinaId }) {
   const [clientes, setClientes] = useState([]);
   const [cobradores, setCobradores] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,14 +22,14 @@ function AdminClienteList() {
 
   useEffect(() => {
     cargarDatos();
-  }, []);
+  }, [onicinaId]);
 
   const cargarDatos = async () => {
     try {
       setLoading(true);
       const [clientesRes, cobradoresRes] = await Promise.all([
-        api.get('/clientes'),
-        api.get('/cobradores'),
+        api.get(`/oficinas/${onicinaId}/clientes`),
+        api.get(`/oficinas/${onicinaId}/cobradores`),
       ]);
       setClientes(clientesRes.data);
       setCobradores(cobradoresRes.data);

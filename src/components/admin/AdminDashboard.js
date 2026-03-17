@@ -36,9 +36,9 @@ function AdminDashboard({ onicinaId }) {
       try {
         [cobradores, clientes, creditos] = await Promise.race([
           Promise.all([
-            api.get('/cobradores').catch(() => ({ data: [] })),
-            api.get('/clientes').catch(() => ({ data: [] })),
-            api.get('/creditos').catch(() => ({ data: [] })),
+            api.get(`/oficinas/${onicinaId}/cobradores`).catch(() => ({ data: [] })),
+            api.get(`/oficinas/${onicinaId}/clientes`).catch(() => ({ data: [] })),
+            api.get(`/oficinas/${onicinaId}/creditos`).catch(() => ({ data: [] })),
           ]),
           timeoutPromise,
         ]);

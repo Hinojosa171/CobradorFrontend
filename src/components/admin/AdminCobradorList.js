@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Eye, Lock, Unlock } from 'lucide-react';
 import api from '../../api';
 
-function AdminCobradorList({ onSelectCobrador }) {
+function AdminCobradorList({ onicinaId, onSelectCobrador }) {
   const [cobradores, setCobradores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -20,12 +20,12 @@ function AdminCobradorList({ onSelectCobrador }) {
 
   useEffect(() => {
     cargarCobradores();
-  }, []);
+  }, [onicinaId]);
 
   const cargarCobradores = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/cobradores');
+      const response = await api.get(`/oficinas/${onicinaId}/cobradores`);
       setCobradores(response.data);
     } catch (error) {
       console.error('Error cargando cobradores:', error);
