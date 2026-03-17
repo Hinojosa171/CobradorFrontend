@@ -35,27 +35,33 @@ export default function Login({ onLoginSuccess, onIrARegistro, rol = 'cobrador' 
 
     try {
       console.log("🔍 Buscando usuario:", user);
-      console.log(`📋 ${labelAcceso}s disponibles:`, usuarios.map(c => ({ usuario: c.usuario, nombre: c.nombre })));
-
-      // Búsqueda flexible (insensible a mayúsculas/minúsculas)
-      const usuarioValido = usuarios.find(c => 
-        c.usuario.toLowerCase().trim() === user.toLowerCase().trim() && 
-        c.password.toString() === pass.toString()
-      );
-
-      if (usuarioValido) {
-        // Verificar si el cobrador está desactivado (solo para cobradores)
-        if (rol === 'cobrador' && usuarioValido.activo === false) {
-          console.log("❌ Cobrador desactivado");
-          setError('❌ Esta cuenta ha sido desactivada. Contacta con la oficina.');
-          return;
+      
+      if (esOficina) {
+        // Para oficinas, usar endpoint de login POST
+        try {
+          const res = await api.post('/oficinas/login', {
+            usuario: user.trim(),
+            password: pass.trim()
+          });
+          console.log("✅ Login exitoso (Oficina):", res.data);
+          onLoginSuccess(res.data);
+        } catch (err) {
+          console.error("❌ Error en login de oficina:", err);
+          setError('Usuario o contraseña incorrectos');
         }
-
-        console.log("✅ Login exitoso:", usuarioValido.nombre);
-        onLoginSuccess(usuarioValido);
       } else {
-        console.log("❌ Credenciales incorrectas");
-        setError('Usuario o contraseña incorrectos. Usuarios disponibles: ' + usuarios.map(c => c.usuario).join(', '));
+        // Para cobradores, usar endpoint de login POST
+        try {
+          const res = await api.post('/cobradores/login', {
+            usuario: user.trim(),
+            password: pass.trim()
+          });
+          console.log("✅ Login exitoso (Cobrador):", res.data);
+          onLoginSuccess(res.data);
+        } catch (err) {
+          console.error("❌ Error en login de cobrador:", err);
+          setError(err.response?.data?.error || 'Usuario o contraseña incorrectos');
+        }
       }
     } catch (err) {
       console.error("Error detallado:", err);
